@@ -99,34 +99,22 @@ int Date::getYear()
 
 bool Date::isThisDateBefore(const Date* compare)
 {
-	if (year < compare->year)
+	if (year > compare->year ||
+		year == compare->year && month > compare->month ||
+		year == compare->year && month == compare->month && day >= compare->day)
 	{
-		return true;
+		return false;
 	}
-	if (month < compare->month)
-	{
-		return true;
-	}
-	if (day < compare->day)
-	{
-		return true;
-	}
-	return false;
+	return true;
 }
 
 bool Date::isThisDateBefore(int compareYear, int compareMonth, int compareDay)
 {
-	if (year < compareYear)
+	if (year > compareYear ||
+		year == compareYear && month > compareMonth ||
+		year == compareYear && month == compareMonth && day >= compareDay)
 	{
-		return true;
-	}
-	if (month < compareMonth)
-	{
-		return true;
-	}
-	if (day < compareDay)
-	{
-		return true;
+		return false;
 	}
 	return true;
 }

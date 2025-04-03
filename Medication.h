@@ -3,11 +3,33 @@
 //This project is not meant for actual use as pharmacy management software for a number of reasons,
 //it is just a personal practice project.
 
+#include <string>
+
+using namespace std;
+
 class Medication
 {
 	public:
+		Medication();
+
+		Medication(	int NDClabelerCode,
+					int NDCproductCode,
+					string NDCpackageCode,
+					char DEAclass,
+					string manufacturer,
+					string brandName,
+					string genericName,
+					string strength,
+					string form,
+					string storageMethod,
+					int packageSize);
+
+		Medication(	int NDClabelerCode,
+					int NDCproductCode,
+					string NDCpackageCodeNDC);
+
 		//ADD: setters/getters
-		char getDEAClass { return DEAclass; }
+		char getDEAClass() { return DEAclass; }
 
 	private:
 

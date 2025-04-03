@@ -17,18 +17,27 @@
 // Nov 30
 // Dec - 31
 
+#include <iostream>
+#include <string>
+#include "MasterValues.h"
+
+using namespace std;
+
 class Date
 {
 	public:
 		Date();
-		Date(int, int, int);
+		Date(int year, int month, int date);
 		void addDays(int addDays);
+		void addYears(int addYears);
 		void set(int years, int months, int days);
 		int getDay();
 		int getMonth();
 		int getYear();
-		bool isThisDateBefore(const Date& other);
+		bool isThisDateBefore(const Date* other);
 		bool isThisDateBefore(int compareYear, int compareMonth, int compareDate);
+		string toStringYearMonthDay();
+		string toStringDayMonthYear();
 		Date& operator= (const Date& other);
 
 	private:

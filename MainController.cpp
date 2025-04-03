@@ -1,3 +1,4 @@
+#pragma once
 //Written by Dyllin Black.
 //This project is not meant for actual use as pharmacy management software for a number of reasons,
 //it is just a personal practice project.
@@ -9,10 +10,11 @@
 #include "Patient.h"
 #include "Medication.h"
 #include "Inventory.h"
+#include "Date.h"
 
 using namespace std;
 
 int main(int argc, char* argv[])
 {
-
+	
 }

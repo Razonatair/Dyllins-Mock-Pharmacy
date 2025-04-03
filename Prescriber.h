@@ -5,10 +5,12 @@
 
 #include <string>
 
+using namespace std;
+
 class Prescriber
 {
 	public:
-
+		Prescriber();
 
 	private:
 

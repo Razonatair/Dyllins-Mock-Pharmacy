@@ -19,22 +19,22 @@ class Prescription
 		//ADD: setters/getters
 
 		void setExpirationDate();
-		bool isThisExpired(Date today);
-		float refillsRemaining();
+		bool isThisExpired(Date* today);
+		double refillsRemaining();
 
 	private:
 		int scriptID;
 
-		Date writtenDate;
-		Date expirationDate;
-		Date earliestFillDate;	//Prescribers have the right to declare the earliest date that a script may be filled.
+		Date* writtenDate;
+		Date* expirationDate;
+		Date* earliestFillDate;	//Prescribers have the right to declare the earliest date that a script may be filled.
 								//This allows the prescriber to send in, say, 3 schedule 2 scripts on the same day, but spaced out.
 
 		string scannedImagePath;
 
-		Patient patient;
-		Prescriber prescriber;
-		Medication medication;
+		Patient* patient;
+		Prescriber* prescriber;
+		Medication* medication;
 
 		int quantityPrescribed;
 		int quantityDispensed;

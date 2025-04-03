@@ -1,3 +1,4 @@
+#pragma once
 //Written by Dyllin Black.
 //This project is not meant for actual use as pharmacy management software for a number of reasons,
 //it is just a personal practice project.
@@ -8,53 +9,64 @@ using namespace std;
 
 Prescription::Prescription()
 {
-
+	scriptID = -1;
+	writtenDate = new Date();
+	expirationDate = new Date();
+	earliestFillDate = new Date();
+	scannedImagePath = "";
+	patient = new Patient();
+	prescriber = new Prescriber();
+	medication = new Medication();
+	quantityPrescribed = 0;
+	quantityDispensed = 0;
+	directions = "";
+	DAWcode = 0;
 }
 
 void Prescription::setExpirationDate()
 {
 	//TODO finish this.
-	char DEAClass = medication.getDEAClass();
+	char DEAClass = medication->getDEAClass();
+	Date* expirationDate = writtenDate;
 
-	//Most drugs aren't scheduled, and the script is valid for a year.
-	if (DEAClass == 'N')
+	switch (DEAClass)
 	{
-		expirationDate.year = writtenDate.year + 1;
-		expirationDate.month = writtenDate.month;
-		expirationDate.day = writtenDate.day;
+	case 'N':
+		expirationDate->addDays(UNSCHEDULED_EXPIRES_AFTER_DAYS);
+		break;
+	case '5':
+		expirationDate->addDays(SCHEDULE_5_EXPIRES_AFTER_DAYS);
+		break;
+	case '4':
+		expirationDate->addDays(SCHEDULE_4_EXPIRES_AFTER_DAYS);
+		break;
+	case '3':
+		expirationDate->addDays(SCHEDULE_3_EXPIRES_AFTER_DAYS);
+		break;
+	case '2':
+		expirationDate->addDays(SCHEDULE_2_EXPIRES_AFTER_DAYS);
+		break;
+	case '1':
+		expirationDate->addDays(SCHEDULE_1_EXPIRES_AFTER_DAYS);
+		break;
 	}
-	//Schedule 3-5 are valid for 6 months.
-	if (DEAClass == '5' || DEAClass == '4' || DEAClass == '3')
-	{
-		if (writtenDate.month + 6 >= 13)
-		{
-			expirationDate.year = writtenDate.year + 1;
-			expirationDate.month = writtenDate.month - 6;
-			expirationDate.day = writtenDate.day;
-			//CURRENT have to address that not all months have the same number of days.
-		}
-	}
-	//Schedule 2 are valid for 30 days.
-	if (DEAClass == '2')
-	{
-
-	}
-	//Finally, schedule 1 drugs according to the DEA are invalid and basically auto-expired.
-	return true;
 }
 
-bool Prescription::isThisExpired(Date today)
+bool Prescription::isThisExpired(Date* today)
 {
-	if (today.year <= expirationDate.year &&
-		today.month <= expirationDate.month &&
-		today.day <= expirationDate.day)
+	if (medication->getDEAClass() == '1')
+	{
+		return true;
+	}
+	if (today->isThisDateBefore(expirationDate) == true)
 	{
 		return false;
 	}
 	return true;
 }
 
-float refillsRemaining()
+double Prescription::refillsRemaining()
 {
 	//TODO finish this.
+	return 0.0;
 }

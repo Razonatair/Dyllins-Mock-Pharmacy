@@ -12,6 +12,21 @@ class Patient
 {
 	public:
 		//ADD: setter/getters.
+		Patient();
+
+		Patient(string firstName,
+				string lastName,
+				char middleInitial,
+				int birthYear,
+				int birthMonth,
+				int birthDay,
+				string address,
+				int phoneCountryCode,
+				int phoneAreaCode,
+				int phonePreFix,
+				int phoneLineNumber,
+				string sex,
+				string gender);
 
 
 	private:
@@ -21,7 +36,7 @@ class Patient
 		string lastName;
 		char middleInitial;
 
-		Date birthDate;
+		Date* birthDate;
 
 		string address;
 								//Breakdown of phone numbers, 'N' marks what the int covers.

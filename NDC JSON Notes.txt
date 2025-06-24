@@ -1,0 +1,66 @@
+NDC JSON Notes
+
+EPC - Established Pharmacological Class
+MoA - Mechanism of Action
+EXT - Extract???, such as "Pyrophosphate Analog [EXT]"
+
+"limit" and "total" seem to indicate the total number of entries, probably just the number of manufacturer-drug combinations, not including the different forms of packaging.
+
+"packaging": [ marks the beginning of a set of different packaging forms, such as 1200 mL in 1 CARTRIDGE (76287-876-01), etc. Thus, there needs to be an overarching NDC such as 76287-876 with a set of children denoting the different ways the drug is packaged by that manufacturer. These different packages will have to have their "description" deciphered to determine what the packaging is, such as "270 TABLET, FILM COATED in 1 BOTTLE (76282-664-27)" There does not appear to be any other way to just know what the packaging contains other than deciphering the description, no table that denotes a list of possible combinations within this JSON.
+
+Packaging descriptions can get quite lengthy such as;
+"product_ndc": "0555-9028",
+"generic_name": "Norethindrone Acetate and Ethinyl Estradiol and Ferrous Fumarate",
+"labeler_name": "Teva Pharmaceuticals USA, Inc.",
+...
+"description": "6 POUCH in 1 CARTON (0555-9028-58)  / 1 BLISTER PACK in 1 POUCH / 1 KIT in 1 BLISTER PACK",
+...
+
+Most of the OTC drugs also don't seem to have "pharm_class" descriptors, which is odd, but some do, such as zinc oxide cream. The prescription ones can have a strange mix wherein EPC and MoA are contained within "pharm_class", or sometimes they're broken up into separate descriptors such as "pharm_class_epc" and "pharm_class_moa" which is truly odd and inconsistent.
+
+Not every drug seems to have a route listed, another oddity.
+
+It seems there will be a fair amount of medications that will have to have their various parts of their data set to some null or default values.
+
+The important parts of the structure of each entry appears to be:
+"product_ndc" which will be the parent NDC
+"generic_name" which is the generic
+"labeler_name" which seems to always be the manufacturer
+"brand_name" which is the brand name
+"brand_name_suffix" which is a shortened version
+"active_ingredients" which can list different active ingredients present in the drug marked with set beginning with [ and ending with ] that contain:
+	"name"
+	"strength"
+	Once again, it seems strength would have to be deciphered, such as "4mg/1" indicating 4 mg per 1 	whatever, such as a tablet, or "5 mg/g" or "5 mg/mL" or "5 g/100g" etc.
+"packaging" which thereafter denotes the beginning of the set of children with [ and the end with ]
+  	within packaging, each child has:
+	"package_ndc"
+	"description"
+"dosage_form" which is the dosage form such as tablet, etc
+"product_type" which denotes what it's for, such as HUMAN PRESCRIPTION DRUG
+"route" which is route, such as oral, intravenous, etc
+
+For our purposes, we will ignore samples, marketing, etc, simply to focus on reading in the list of NDCs to provide some kind of data structure with which to quickly look up a medication's data.
+
+The product NDC and children NDCs along with the names are easy enough to read, but it'll take some work to be able to decipher all the different packaging descriptions in order to learn bottle/package counts, etc. Will also have to work through the different dosage forms until they're all covered, as well as the product types and routes.
+
+
+--------------------
+Fastest lookup is probably a hash table indexed by manufacturer, then a hash table of drugs, then a hash table of packaging children. Probably best to start with a set of dynamically sized hash tables and then once the file is read completely, transfer to hash tables with set sizes to minimize memory allocation.
+
+Manufacturer hash table can be of size 99999, but I believe it's highly unlikely all 99999 spots will be taken up. Thus, how should we crunch the size down? Maybe instead of a hash table, we can binary search an ascending-organized table. Binary search is a max of 17 checks to find the right manufacturer, probably a good bit less since according to https://pharmchoices.com/list-of-pharmaceutical-companies-in-the-us/ there are 1,574 FDA-approved facilities manufacturing pharmaceutical products in 47 states, the District of Columbia and Puerto Rico, and each manufacturer may well have multiple facilities. Binary search is simpler to implement than to try to find some perfect hash function to perfectly encapsule all the manufacturers... Probably a bit more computational power, but significantly saves on memory. Given that business computers tend to lack RAM, memory constraints might be a real problem. Their CPUs also tend to be lacking at least from an intensively computational perspective, but that shouldn't really be a problem I would think in this case.
+
+Thus, an ascending-organized array of manufacturers with similar drug array per manufacturer and array of children per given drug makes a lot of sense.
+
+I should probably also create a growing array of Established Pharmacological Class [EPC] and Mechanism of Action [MoA]. These would be pretty relevant for determining interactions between drugs if I want to take the mock pharmacy program that far.
+
+So what I need is:
+
+An object containing;
+an array of manufacturers,
+an array of drugs-per-manufacturer,
+an array of packaging-per-drug-per-manufacturer,
+
+An object containing;
+an array of Established Pharmacological Class [EPC],
+an array of Mechanism of Action [MoA],

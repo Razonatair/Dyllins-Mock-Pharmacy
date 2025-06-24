@@ -11,6 +11,7 @@
 #include "Medication.h"
 #include "Inventory.h"
 #include "Date.h"
+#include "NDCJSONReader.h"
 
 using namespace std;
 

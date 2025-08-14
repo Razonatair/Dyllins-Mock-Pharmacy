@@ -64,3 +64,5 @@ an array of packaging-per-drug-per-manufacturer,
 An object containing;
 an array of Established Pharmacological Class [EPC],
 an array of Mechanism of Action [MoA],
+
+What I also need is a way to search by Generic and Brand names too... Hmm... Something to consider.

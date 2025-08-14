@@ -30,6 +30,10 @@ class Medication
 
 		//ADD: setters/getters
 		char getDEAClass() { return DEAclass; }
+		int getManufacturerCode() { return NDClabelerCode; }
+		int getProductCode() { return NDCproductCode; }
+		string getGenericName() { return genericName; }
+		string getBrandName() { return brandName; }
 
 	private:
 
